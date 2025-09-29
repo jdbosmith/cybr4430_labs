@@ -1,5 +1,5 @@
-# mod01_07
-Advanced Concepts in Complex Vector Spaces
+# mod01_08
+Tensor Analysis
 
-- Review the comments in mod01_07.py and make the appropriate changes.
+- Review the comments in mod01_08.py and make the appropriate changes.
 - Run pytest to verify you made the correct changes.
