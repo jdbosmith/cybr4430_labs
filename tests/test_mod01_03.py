@@ -1,5 +1,5 @@
 from mod01_03 import toPolar, toCart, multPolar
-from math import isclose
+import math
 
 def test_toPolar():   
     assert toPolar(-6) == (6,180)
