@@ -9,7 +9,7 @@ def toPolar(c1):
 
     r = abs(c1)
     theta = math.degrees(cmath.phase(c1))
-    return r, int(theta)
+    return r, theta
 
     
 #  function that takes a well formed polar representation of a complex number as its input and returns the cartesian representation of its input.
