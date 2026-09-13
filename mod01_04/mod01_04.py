@@ -20,27 +20,17 @@ def matAdd(m1,m2):
 
     
 #  function that takes a scalar and a complex vector/matrix as its two inputs and returns a vector/matrix that is a product of its two inputs.
-def scalarMatMult(m1,m2):
-    #Check if the dimensions of the two matrices are compatible for multiplication 
-    if not isinstance(m1, list) or not isinstance(m2, list):
-        return False
-    
-    rows_m1 = len(m1)
-    cols_m1 = len(m1[0])
-    rows_m2 = len(m2)
-    cols_m2 = len(m2[0])
-
-    if cols_m1 != rows_m2:
+def scalarMatMult(s,m1):
+    #Check if the s is complex number and if m1 is a list
+    if not isinstance(s, (int, float, complex)) or not isinstance(m1, list):
         return False
 
+    # Element-wise multiplication
     result = []
-    for i in range(rows_m1):
+    for i in range(len(m1)):
         row = []
-        for j in range(cols_m2):
-            s = 0
-            for k in range(cols_m1):
-                s += m1[i][k] * m2[k][j]
-            row.append(s)
+        for j in range(len(m1[i])):
+            row.append(s * m1[i][j])
         result.append(row)
 
     return result
