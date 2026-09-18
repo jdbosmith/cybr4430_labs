@@ -133,9 +133,9 @@ def checkHadamard(m1):
     return True
 
 def getHadmond():
-    #TODO: Needed for test_getHadmond() in test_mod01_05.py, but not implemented yet.
+    #TODO: Needed for test_getHadmond() in test_mod01_05.py, but not implemented.
     return True
 
 def checkHadmond(m1):
-    #TODO: Needed for test_getHadmond() in test_mod01_05.py, but not implemented yet.
+    #TODO: Needed for test_getHadmond() in test_mod01_05.py, but not implemented.
     return True
