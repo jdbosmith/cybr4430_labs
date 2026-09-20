@@ -1,6 +1,6 @@
 {
     "python.testing.pytestArgs": [
-        "mod01_05"
+        "mod01_06"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,

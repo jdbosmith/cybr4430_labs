@@ -85,5 +85,16 @@ def innerprod(m1, m2):
 
 #  function that takes a complex vector of size n as its input and returns the norm of its input vector.
 def norm_nvec(v):
-    #Complete the function
-    return False
+    # Ensure the input is a well‑formed vector (1‑D list of numbers)
+    if not isVector(v):
+        return False
+    
+    total = 0
+    for val in v:
+        # abs(val) gives the magnitude |a + bi|
+        # abs(val)**2 gives a^2 + b^2, the squared magnitude
+        total += abs(val) ** 2
+    # Take the square root of the sum of squared magnitudes
+    return total ** 0.5
+
+
