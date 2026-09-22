@@ -101,6 +101,32 @@ def conjugTranspose(m1):
         return False
     return transpose(result)
 
+#helper function that takes two well-formed complex vectors/matrices as its input multiplies them.
+def matrixMult(M1, M2):
+    if not (isWellFormed(M1) and isMatrix(M1) and
+            isWellFormed(M2) and isMatrix(M2)):
+        return False
+
+    rows1 = len(M1)
+    cols1 = len(M1[0])
+    rows2 = len(M2)
+    cols2 = len(M2[0])
+
+    if cols1 != rows2:
+        return False
+
+    result = []
+    for i in range(rows1):
+        row = []
+        for j in range(cols2):
+            total = 0
+            for k in range(cols1):
+                total += M1[i][k] * M2[k][j]
+            row.append(total)
+        result.append(row)
+
+    return result
+
 #  function that takes a well-formed matrix with real/complex entries as its input and outputs true if the input matrix is Hermitian and outputs false if the matrix is not Hermitian.
 def isHermitian(m):
     #Check if the input is a well-formed matrix
@@ -141,24 +167,21 @@ def isUnitary(m):
         return False
 
     # Multiply Udagger * U
-    product = []
-    for i in range(n):
-        row = []
-        for j in range(n):
-            s = 0
-            for k in range(n):
-                s += Udagger[i][k] * m[k][j]
-            row.append(s)
-        product.append(row)
+    product = matrixMult(Udagger, m)
+    if product is False:
+        return False
 
     # Check if product is identity
+    tolerance = 1e-10
+
     for i in range(n):
         for j in range(n):
+            val = product[i][j]
+
             if i == j:
-                if abs(product[i][j] - 1) > 1e-10:
+                if abs(val - 1) > tolerance:
                     return False
             else:
-                if abs(product[i][j]) > 1e-10:
+                if abs(val) > tolerance:
                     return False
-
     return True
