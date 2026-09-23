@@ -1,4 +1,4 @@
-#A library of functions for complex numbers, vectors, and matrices.
+# A library of functions for complex numbers, vectors, and matrices.
 
 import math
 import cmath
@@ -24,7 +24,8 @@ def modComplex(a):
     return abs(a)
 
 def conjComplex(a):
-    return a.conjugate()
+    # Manual conjugation
+    return complex(a.real, -a.imag)
 
 def getReal(a):
     return a.real
@@ -69,7 +70,10 @@ def isMatrix(M):
         return False
     return True
 
-def isWellFormed(m):
+def isWellFormed(m): 
+    # Must not be empty
+    if m == []:
+        return False
     return isVector(m) or isMatrix(m)
 
 
@@ -113,10 +117,20 @@ def transpose(m):
     return False
 
 def conjugate(m):
+    # Manual conjugation for vectors
     if isVector(m):
-        return [x.conjugate() for x in m]
+        return [complex(x.real, -x.imag) if isinstance(x, complex) else complex(x, -0.0) for x in m]
+
+    # Manual conjugation for matrices
     if isMatrix(m):
-        return [[x.conjugate() for x in row] for row in m]
+        return [
+            [
+                complex(x.real, -x.imag) if isinstance(x, complex) else complex(x, -0.0)
+                for x in row
+            ]
+            for row in m
+        ]
+
     return False
 
 def conjugTranspose(m):
@@ -150,14 +164,24 @@ def matVecMult(M, v):
     return [sum(M[i][j] * v[j] for j in range(cols)) for i in range(rows)]
 
 def innerprod(a, b):
+    # Manual conjugation inside inner product
     if isVector(a) and isVector(b):
         if len(a) != len(b):
             return False
-        return sum(a[i].conjugate() * b[i] for i in range(len(a)))
+        return sum(
+            complex(a[i].real, -a[i].imag) * b[i]
+            for i in range(len(a))
+        )
+
     if isMatrix(a) and isMatrix(b):
         if len(a) != len(b) or len(a[0]) != len(b[0]):
             return False
-        return sum(a[r][c].conjugate() * b[r][c] for r in range(len(a)) for c in range(len(a[0])))
+        return sum(
+            complex(a[r][c].real, -a[r][c].imag) * b[r][c]
+            for r in range(len(a))
+            for c in range(len(a[0]))
+        )
+
     return False
 
 def norm_nvec(v):
@@ -210,7 +234,8 @@ def isHermitian(M):
     n = len(M)
     for i in range(n):
         for j in range(n):
-            if M[i][j].conjugate() != M[j][i]:
+            # Manual conjugation
+            if complex(M[i][j].real, -M[i][j].imag) != M[j][i]:
                 return False
     return True
 
