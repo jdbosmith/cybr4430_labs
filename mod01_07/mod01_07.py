@@ -140,7 +140,7 @@ def isHermitian(m):
     if num_rows != num_cols:
         return False
 
-#Hermitian matrix: An 𝑛×𝑛 matrix is called hermitian if 𝐴^†=𝐴.
+    #Hermitian matrix: An 𝑛×𝑛 matrix is called hermitian if 𝐴^†=𝐴.
     # Check if the matrix is Hermitian
     for i in range(num_rows):
         for j in range(num_cols):
@@ -160,7 +160,7 @@ def isUnitary(m):
     if n == 0 or len(m[0]) != n:
         return False
 
-#Unitary Matrix: An 𝑛×𝑛 matrix is unitary if 𝑈𝑈^†=𝑈^†𝑈=𝐼.
+    #Unitary Matrix: An 𝑛×𝑛 matrix is unitary if 𝑈𝑈^†=𝑈^†𝑈=𝐼.
     # Compute conjugate transpose
     Udagger = conjugTranspose(m)
     if Udagger is False:
