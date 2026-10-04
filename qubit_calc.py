@@ -1,5 +1,6 @@
 import cmath
 import math
+import re
 
 class Qubit:
     def __init__(self, a, b):
@@ -11,6 +12,9 @@ class Qubit:
 
     def is_valid(self, tol=1e-12):
         return abs(self.norm() - 1) < tol
+    
+    def is_superposition(self, tol=1e-12):
+        return abs(self.a) > tol and abs(self.b) > tol
 
     def __add__(self, other):
         return Qubit(self.a + other.a, self.b + other.b)
@@ -20,9 +24,15 @@ class Qubit:
 
     def __mul__(self, scalar):
         return Qubit(scalar * self.a, scalar * self.b)
+    
+    def __truediv__(self, scalar):
+        return Qubit(self.a / scalar, self.b / scalar)
 
     def __rmul__(self, scalar):
         return self.__mul__(scalar)
+    
+    def __neg__(self):
+        return Qubit(-self.a, -self.b)
 
     def __repr__(self):
         return f"Qubit(a={self.a}, b={self.b})"
@@ -34,7 +44,6 @@ ket1 = Qubit(0, 1)
 ket_plus = Qubit(1/math.sqrt(2), 1/math.sqrt(2))
 ket_minus = Qubit(1/math.sqrt(2), -1/math.sqrt(2))
 
-
 def evaluate_qubit_expression(expr):
     # Strip assignment if present
     if "=" in expr:
@@ -44,11 +53,16 @@ def evaluate_qubit_expression(expr):
     # Replace sqrt with math.sqrt
     expr = expr.replace("sqrt", "math.sqrt")
     
-    # Allow e^(...) syntax
-    expr = expr.replace("e^(", "cmath.exp(")
+    # Replace pi with math.pi
+    expr = expr.replace("pi", "math.pi")
 
-    # Allow exp(...) syntax safely
-    expr = expr.replace("exp(", "cmath.exp(")
+    # Allow e^(...) syntax (handles e^( and e^(( etc.)
+    expr = expr.replace("e^(", "cmath.exp(")
+    expr = expr.replace("e^((", "cmath.exp((")
+
+    # Allow exp(...) syntax safely (do NOT touch cmath.exp)
+    expr = re.sub(r'(?<!\.)exp\(', 'cmath.exp(', expr)
+
 
     allowed = {
         "ket0": ket0,
@@ -69,7 +83,6 @@ def evaluate_qubit_expression(expr):
     else:
         return None, "Expression did not produce a qubit."
 
-
 def qubit_console():
     print("Enter a qubit expression. Example:")
     print("  1/sqrt(2) * (ket0 - ket1)")
@@ -85,6 +98,7 @@ def qubit_console():
         print(message)
         if qubit:
             print("Result:", qubit)
+            print("Superposition:", qubit.is_superposition())
         print()
 
 
