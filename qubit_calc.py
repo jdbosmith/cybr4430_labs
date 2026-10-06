@@ -15,6 +15,18 @@ class Qubit:
     
     def is_superposition(self, tol=1e-12):
         return abs(self.a) > tol and abs(self.b) > tol
+    
+    def inner(self, other):
+        return (self.a.conjugate() * other.a + self.b.conjugate() * other.b)
+    
+    def probability_of(self, basis_state):
+        amp = basis_state.inner(self)
+        return abs(amp)**2
+
+    def pretty(self, digits=6):
+        a = round(self.a.real, digits) + round(self.a.imag, digits)*1j
+        b = round(self.b.real, digits) + round(self.b.imag, digits)*1j
+        return f"Qubit(a={a}, b={b})"
 
     def __add__(self, other):
         return Qubit(self.a + other.a, self.b + other.b)
@@ -97,10 +109,14 @@ def qubit_console():
         qubit, message = evaluate_qubit_expression(expr)
         print(message)
         if qubit:
-            print("Result:", qubit)
-            print("Superposition:", qubit.is_superposition())
-        print()
+            print("Result:", qubit.pretty())
+            print("Norm:", round(qubit.norm(), 6))
+            print("P(ket0):", round(qubit.probability_of(ket0), 6))
+            print("P(ket1):", round(qubit.probability_of(ket1), 6))
+            print("P(ket_plus):", round(qubit.probability_of(ket_plus), 6))
+            print("P(ket_minus):", round(qubit.probability_of(ket_minus), 6))
 
+        print()
 
 if __name__ == "__main__":
     qubit_console()
