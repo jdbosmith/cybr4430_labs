@@ -1,4 +1,5 @@
 import cmath
+from encodings.punycode import digits
 import math
 import re
 
@@ -22,6 +23,28 @@ class Qubit:
     def probability_of(self, basis_state):
         amp = basis_state.inner(self)
         return abs(amp)**2
+
+    def canonical(self, tol=1e-12):
+        """
+        Returns a new Qubit with global phase removed.
+        The first nonzero amplitude is made real and positive.
+        """
+        a, b = self.a, self.b
+
+        # Choose first nonzero component
+        if abs(a) > tol:
+            phase = a / abs(a)
+        elif abs(b) > tol:
+            phase = b / abs(b)
+        else:
+            return Qubit(0, 0)  # Should not happen for valid qubit
+
+        return Qubit(a / phase, b / phase)
+    
+    def canonical_pretty(self, digits=6):
+        c = self.canonical()
+        return c.pretty(digits)
+
 
     def pretty(self, digits=6):
         a = round(self.a.real, digits) + round(self.a.imag, digits)*1j
@@ -110,6 +133,7 @@ def qubit_console():
         print(message)
         if qubit:
             print("Result:", qubit.pretty())
+            print("Canonical:", qubit.canonical_pretty())
             print("Norm:", round(qubit.norm(), 6))
             print("P(ket0):", round(qubit.probability_of(ket0), 6))
             print("P(ket1):", round(qubit.probability_of(ket1), 6))
