@@ -257,3 +257,47 @@ def isUnitary(M):
                 if abs(product[i][j]) > tol:
                     return False
     return True
+
+def eigenvalues(A):
+    if not isMatrix(A) or len(A) != 2 or len(A[0]) != 2:
+        return False
+
+    a = A[0][0]
+    b = A[0][1]
+    c = A[1][0]
+    d = A[1][1]
+
+    # Trace and determinant
+    trace = a + d
+    det = a*d - b*c
+
+    # Discriminant
+    disc = trace*trace - 4*det
+
+    # Two eigenvalues
+    lambda1 = (trace + cmath.sqrt(disc)) / 2
+    lambda2 = (trace - cmath.sqrt(disc)) / 2
+
+    return [lambda1, lambda2]
+
+def eigenvector(A, lam):
+    if not isMatrix(A) or len(A) != 2 or len(A[0]) != 2:
+        return False
+
+    a = A[0][0]
+    b = A[0][1]
+    c = A[1][0]
+    d = A[1][1]
+
+    # Solve (A - λI)v = 0
+    # Use first row unless b == 0
+    if abs(b) > 1e-12:
+        # (a - λ)x + b y = 0  →  x = -b / (a - λ)
+        x = -b / (a - lam)
+        y = 1
+        return [x, y]
+    else:
+        # Use second row: c x + (d - λ)y = 0 → x = -(d - λ)/c
+        x = -(d - lam) / c
+        y = 1
+        return [x, y]
